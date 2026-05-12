@@ -33,7 +33,7 @@ Built by **TKMCE Students** as part of the MYOSA Make Your Own Sensors Applicati
  
 Smallholder farmers make daily decisions — when to irrigate, when to spray, when to harvest with no real-time, hyper-local data. National weather forecasts work at district scale, not field scale. Extension bulletins arrive weekly, not daily. There is no personalised, affordable advisory system built for the individual farm.
  
-**KhetGPT** solves this by turning the MYOSA Mini into an always-on field intelligence node. Every 10 minutes it reads temperature, barometric pressure, ambient light, and canopy colour from the BMP180 and APDS9960 sensors. That data is posted securely to a cloud server, which enriches it with a live weather forecast and hands the combined context to Google Gemini. The LLM generates a plain-language farm advisory — under 500 words — and delivers it to the farmer's Telegram messenger automatically.
+**KhetGPT** solves this by turning the MYOSA Mini into an always-on field intelligence node. Every 10 minutes it reads temperature, barometric pressure, ambient light, and canopy colour from the BMP180,MPU6050 and APDS9960 sensors. That data is posted securely to a cloud server, which enriches it with a live weather forecast and hands the combined context to Google Gemini. The LLM generates a plain-language farm advisory — under 500 words — and delivers it to the farmer's Telegram messenger automatically.
  
 No dashboard to check. No app to install. No technical knowledge needed. Just a message every morning in the farmer's own language telling them what happened in their field overnight and what to do today.
 
@@ -148,6 +148,7 @@ The server will be live at `http://localhost:3000` or your Render deployment URL
 Adafruit BMP085 Library
 Adafruit APDS9960 Library
 Adafruit SSD1306
+Adafruit MPU6050
 Adafruit GFX Library
 ```
  
@@ -187,6 +188,7 @@ All sensors connect via the MYOSA Mini's plug-and-play I2C connector:
 ```plaintext
 BMP180   → I2C port (SDA/SCL)
 APDS9960 → I2C port (SDA/SCL)
+MPU6050  → I2C port (SDA/SCL)
 OLED     → I2C port (SDA/SCL, address 0x3C)
 ```
  
@@ -199,6 +201,7 @@ OLED     → I2C port (SDA/SCL, address 0x3C)
 * **APDS9960** — Ambient light and RGB colour sensor
 * **SSD1306 OLED** — 128×64 local display
 * **Arduino C++** — ESP32 firmware (Arduino framework)
+* **MPU6050** — For checking animal intrusion
 * **Node.js + Express** — Lightweight cloud API server
 * **Google Gemini (`gemma-4-26b-a4b-it`)** — LLM advisory generation via `@google/genai` SDK
 * **Telegram Bot API** — Advisory delivery to farmer's phone
@@ -232,6 +235,7 @@ Adafruit BMP085 Library       (v1.x)
 Adafruit APDS9960 Library     (v1.x)
 Adafruit SSD1306              (v2.x)
 Adafruit GFX Library          (v1.x)
+Adafruit MPU6050              (v1.x)
 WiFi / HTTPClient / WiFiClientSecure  (bundled with ESP32 Arduino core)
 ```
  
@@ -261,12 +265,10 @@ MIT License — open for educational use, modification, and deployment by farmin
  
 Contributions welcome. Priority areas for improvement:
  
-* **MPU6050 integration** — add accelerometer/gyroscope for wind-sway (wind speed proxy) and animal intrusion detection; firmware stub ready for extension
 * **Solar Charging** - Adding of Solar based charging
-* **Soil moisture sensor** — add DHT22 or capacitive soil probe for irrigation scheduling precision
-* **Multi-language prompting** — test and validate advisory quality across Malayalam, Tamil, Kannada, and Hindi
+* **Soil moisture sensor** — add capacitive soil probe for irrigation scheduling precision
 * **LoRa fallback** — replace Wi-Fi with LoRa for farms without mobile coverage
-* **Voice advisory** — pipe Gemini output through a TTS API (ElevenLabs or Google TTS) for audio delivery to low-literacy farmers
+* **Voice advisory** — pipe Gemini output through a TTS API (ElevenLabs or Google TTS) for audio delivery for farmers lagging technical skills 
 * **Prompt tuning** — improve the sensor-to-prompt template for specific crops (cardamom, pepper, banana, tomato, rice)
 Open an issue or submit a PR on the project repository.
 
