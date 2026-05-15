@@ -204,6 +204,7 @@ OLED     → I2C port (SDA/SCL, address 0x3C)
 * **SSD1306 OLED** — 128×64 local display
 * **Arduino C++** — ESP32 firmware (Arduino framework)
 * **MPU6050** — For checking animal intrusion
+* **18650 Battery Circuit** — For Powering the Device
 * **Node.js + Express** — Lightweight cloud API server
 * **Google Gemini (`gemma-4-26b-a4b-it`)** — LLM advisory generation via `@google/genai` SDK
 * **Telegram Bot API** — Advisory delivery to farmer's phone
