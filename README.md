@@ -33,8 +33,9 @@ Built by **TKMCE Students** as part of the MYOSA Make Your Own Sensors Applicati
  
 Smallholder farmers make daily decisions — when to irrigate, when to spray, when to harvest with no real-time, hyper-local data. National weather forecasts work at district scale, not field scale. Extension bulletins arrive weekly, not daily. There is no personalised, affordable advisory system built for the individual farm.
  
-**KhetGPT** solves this by turning the MYOSA Mini into an always-on field intelligence node. Every 10 minutes it reads temperature, barometric pressure, ambient light, and canopy colour from the BMP180,MPU6050 and APDS9960 sensors. That data is posted securely to a cloud server, which enriches it with a live weather forecast and hands the combined context to Google Gemini. The LLM generates a plain-language farm advisory — under 500 words — and delivers it to the farmer's Telegram messenger automatically.
- 
+**KhetGPT** solves this by turning the MYOSA Mini into an always-on field intelligence node.  It reads temperature, barometric pressure, ambient light, and canopy colour from the BMP180,MPU6050 and APDS9960 sensors. That data is posted securely to a cloud server, which enriches it with a live weather forecast and hands the combined context to Google Gemini. The LLM generates a plain-language farm advisory — under 500 words — and delivers it to the farmer's messenger service (SMS,WhatsApp,Telegram) automatically. PS: For the current technical stack for messaging Telegram is used
+
+
 No dashboard to check. No app to install. No technical knowledge needed. Just a message every morning in the farmer's own language telling them what happened in their field overnight and what to do today.
 
 **Key features:**
@@ -82,7 +83,7 @@ The formatted advisory is sent to the configured Telegram chat via the Bot API. 
 
 For Project purposes, the Messaging Part is implemented in Telegram for real case scenarios. The same system can be incorporated into SMS or WhatsApp-based messaging systems
 
-### **5. OLED real-time display**
+### **4. OLED real-time display**
  
 While the advisory is generated and delivered in the cloud, the OLED shows live sensor readings locally at the field node at all times — useful for in-field inspection without a phone.
  
@@ -96,7 +97,7 @@ Light: 1847
 ────────────────
 ```
 
-### **6. Language configuration**
+### **5. Language configuration**
  
 The advisory language is set in a single firmware constant:
  
@@ -119,6 +120,7 @@ git clone https://github.com/your-team/khetgpt-server
 cd khetgpt-server
 npm install
 ```
+<!-- change this-->
  
 **2. Set environment variables** (on Render, Railway, or locally via `.env`):
  
@@ -266,7 +268,7 @@ MIT License — open for educational use, modification, and deployment by farmin
 Contributions welcome. Priority areas for improvement:
  
 * **Solar Charging** - Adding of Solar based charging
-* **Soil moisture sensor** — add capacitive soil probe for irrigation scheduling precision
+* **Soil moisture sensor** — add a capacitive soil probe for irrigation scheduling precision
 * **LoRa fallback** — replace Wi-Fi with LoRa for farms without mobile coverage
 * **Voice advisory** — pipe Gemini output through a TTS API (ElevenLabs or Google TTS) for audio delivery for farmers lagging technical skills 
 * **Prompt tuning** — improve the sensor-to-prompt template for specific crops (cardamom, pepper, banana, tomato, rice)
