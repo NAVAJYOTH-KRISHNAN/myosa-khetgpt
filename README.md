@@ -116,11 +116,10 @@ Gemini honours the language instruction and generates the full advisory in that 
 **1. Clone the server and install dependencies:**
  
 ```bash
-git clone https://github.com/your-team/khetgpt-server
-cd khetgpt-server
+git clone https://github.com/NAVAJYOTH-KRISHNAN/myosa-khetgpt/tree/main/server
+cd myosa-khetgpt/tree/main/server
 npm install
 ```
-<!-- change this-->
  
 **2. Set environment variables** (on Render, Railway, or locally via `.env`):
  
