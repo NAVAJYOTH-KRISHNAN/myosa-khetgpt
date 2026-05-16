@@ -51,11 +51,21 @@ No dashboard to check. No app to install. No technical knowledge needed. Just a 
 * Language-configurable — Supports All languages as per the farmers need
 ---
  ## Demo / Examples
+### **Image**
+ <p align="center">
+  <img src="myosa-img.png" width="800"><br/>
+  <i>Prototype</i>
+</p>
+
  ### **Videos**
  <video controls width="100%">
   <source src="myosa-demo.mp4" type="video/mp4">
 </video>
 <p align="center"><i>Demo</i></p>
+ <video controls width="100%">
+  <source src="myosa-presentation.mp4" type="video/mp4">
+</video>
+<p align="center"><i>Presentation</i></p>
 <!-- align the file once uploaded -->
 ## Features (Detailed)
 The MYOSA Mini's BMP180 and APDS9960 are both actively read every loop cycle:
@@ -264,7 +274,18 @@ PORT                  — (optional; Render sets this automatically)
  
 ---
 ## File Structure
-<!-- add as per the documentation-->
+```plaintext
+/myosa-khetgpt
+  ├─ README.md
+  ├─ khetgpt.ino
+  ├─ khetgpt_cover_img.png
+  ├─ myosa-demo.mp4
+  ├─ myosa-img.png
+  ├─ myosa-presentation.mp4
+  └─ server/
+      ├─ package.json
+      └─ server.js
+```
 
 ## License
  
