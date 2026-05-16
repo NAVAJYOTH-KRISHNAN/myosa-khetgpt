@@ -51,7 +51,11 @@ No dashboard to check. No app to install. No technical knowledge needed. Just a 
 * Language-configurable — Supports All languages as per the farmers need
 ---
  ## Demo / Examples
- ### **Images**
+ ### **Videos**
+ <video controls width="100%">
+  <source src="myosa-demo.mp4" type="video/mp4">
+</video>
+<p align="center"><i>Demo</i></p>
 <!-- align the file once uploaded -->
 ## Features (Detailed)
 The MYOSA Mini's BMP180 and APDS9960 are both actively read every loop cycle:
