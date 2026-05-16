@@ -1,8 +1,3 @@
-<p align="center">
-  <img src="khetgpt_cover_img.png" width="800"><br/>
-  <i>KhetGPT</i>
-</p>
-
 ---
 Publish Date: 2026-05-09
  
@@ -22,28 +17,33 @@ Tags:
   - APDS9960
   - Social Impact
 ---
+<p align="center">
+  <img src="khetgpt_cover_img.png" width="800"><br/>
+  <i>KhetGPT</i>
+</p>
 
-> Every morning before sunrise, your field speaks — KhetGPT listens and tells you exactly what to do.
+
+> Every day, your field speaks — KhetGPT listens and tells you exactly what to do.
  
 ---
 ## Acknowledgements
  
-Built by **TKMCE Students** as part of the MYOSA Make Your Own Sensors Applications initiative under the IEEE Sensors Council. Special thanks to the MYOSA team for the sensor platform and to the farming communities of Kollam whose real problems shaped this project. 
+Built by **TKMCE Students** as part of the MYOSA Make Your Own Sensors Applications initiative under the IEEE Sensors Council. Special thanks to the MYOSA team for the sensor platform and to the farming communities of Kollam, whose real problems shaped this project. 
 
 ---
 
 ## Overview
  
-Smallholder farmers make daily decisions — when to irrigate, when to spray, when to harvest with no real-time, hyper-local data. National weather forecasts work at district scale, not field scale. Extension bulletins arrive weekly, not daily. There is no personalised, affordable advisory system built for the individual farm.
+Smallholder farmers make daily decisions — when to irrigate, when to spray, when to harvest with no real-time, hyper-local data. National weather forecasts work at the district scale, not the field scale. Extension bulletins arrive weekly, not daily. There is no personalised, affordable advisory system built for the individual farm.
  
-**KhetGPT** solves this by turning the MYOSA Mini into an always-on field intelligence node.  It reads temperature, barometric pressure, ambient light, and canopy colour from the BMP180,MPU6050 and APDS9960 sensors. That data is posted securely to a cloud server, which enriches it with a live weather forecast and hands the combined context to Google Gemini. The LLM generates a plain-language farm advisory — under 500 words — and delivers it to the farmer's messenger service (SMS,WhatsApp,Telegram) automatically. PS: For the current technical stack for messaging Telegram is used
+**KhetGPT** solves this by turning the MYOSA Mini into an always-on field intelligence node.  It reads temperature, barometric pressure, ambient light, and canopy colour from the BMP180, MPU6050 and APDS9960 sensors. That data is posted securely to a cloud server, which enriches it with a live weather forecast and hands the combined context to Google Gemini. The LLM generates a plain-language farm advisory — under 500 words — and delivers it to the farmer's messenger service (SMS,WhatsApp,Telegram) automatically. PS: For the current technical stack for messaging Telegram is used
 
 
 No dashboard to check. No app to install. No technical knowledge needed. Just a message every morning in the farmer's own language telling them what happened in their field overnight and what to do today.
 
 **Key features:**
  
-* All MYOSA Mini sensors active and contributing to the advisory
+* All MYOSA Mini sensors are active and contributing to the advisory
 * Gemini LLM generates crop-aware, field-specific advice — not generic tips
 * Delivery via Telegram bot — works on any smartphone, no extra app
 * Secure ESP-to-server communication with API key authentication and rate limiting
