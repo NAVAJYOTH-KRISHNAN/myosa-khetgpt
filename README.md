@@ -2,6 +2,7 @@
   <img src="khetgpt_cover_img.png" width="800"><br/>
   <i>KhetGPT</i>
 </p>
+
 ---
 Publish Date: 2026-05-09
  
