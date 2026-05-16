@@ -58,9 +58,7 @@ No dashboard to check. No app to install. No technical knowledge needed. Just a 
 </p>
 
  ### **Videos**
- <video controls width="100%">
-  <source src="myosa-demo.mp4" type="video/mp4">
-</video>
+https://github.com/user-attachments/assets/5d1cae26-c9d3-4b10-b837-80393be25b8d
 <p align="center"><i>Demo</i></p>
  <video controls width="100%">
   <source src="myosa-presentation.mp4" type="video/mp4">
