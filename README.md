@@ -307,6 +307,8 @@ Contributions welcome. Priority areas for improvement:
 * **LoRa fallback** — replace Wi-Fi with LoRa for farms without mobile coverage
 * **Voice advisory** — pipe Gemini output through a TTS API (ElevenLabs or Google TTS) for audio delivery for farmers lagging technical skills 
 * **Prompt tuning** — improve the sensor-to-prompt template for specific crops (cardamom, pepper, banana, tomato, rice)
+* **Better MPU6050 algorithm** — Better Animal Intrusion algorithm for MPU6050
+
 Open an issue or submit a PR on the project repository.
 
 Add Images 
