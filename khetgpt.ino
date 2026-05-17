@@ -22,6 +22,7 @@
 // =====================================================
 const char* WIFI_SSID     = "YOUR_WIFI_SSID";
 const char* WIFI_PASSWORD = "YOUR_WIFI_PASSWORD";
+const char* Location = "Kollam";
 
 // =====================================================
 // SERVER SETTINGS
@@ -257,7 +258,9 @@ String buildLogicString(float temperature,
     msg += "No nearby activity detected. ";
     msg += "What should the farmer monitor next?";
   }
-
+  msg += "His location is in";
+  msg += String(Location);
+  msg+= "fetch the weather too"
   msg += "\nThe report should be in ";
   msg += String(Lang);
   msg += " language under 500 words.";
