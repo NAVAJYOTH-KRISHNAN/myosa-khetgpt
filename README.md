@@ -58,18 +58,18 @@ No dashboard to check. No app to install. No technical knowledge needed. Just a 
 </p>
 
  ### **Videos**
-https://github.com/user-attachments/assets/08632e1a-e9cf-495f-8031-63f989886688
-<!-- Demo video attached using GitHub asset because of markdown embedding issues, but locally uploaded in the repo -->
-<p align="center"><i>Demo</i></p>
  <video controls width="100%">
-  <source src="myosa-presentation.mp4" type="video/mp4">
+  <source src="myosa-demo.mp4" type="video/mp4">
 </video>
-<i><h4>If Demo is not loaded, you can refer to the external <a href="https://drive.google.com/file/d/1-qDRL7SbVYk5icCxpXtDSej6D9g7rGTk/view?usp=sharing">link</a> here, or the video is uploaded locally on this repo to download and watch</h4></i>
+<p align="center"><i>Demo</i></p>
+<i><h4>If Demo is not loaded, you can refer to the external <a href="https://drive.google.com/file/d/1cT4op5hqxDaO5wd02GfCW2naYTxVvihY/view?usp=sharing">link</a> here, or the video is uploaded locally on this repo to download and watch</h4></i>
 <br>
+ <video controls width="100%">
+  <source src="khetgpt-presentation.mp4" type="video/mp4">
+</video>
 <p align="center"><i>Presentation</i>
-<i><h4>If Presentation is not loaded, you can refer to the external <a href="https://drive.google.com/file/d/1lTcCX1wZTP9j7hcAEMRGfbsYkwP-RXU_/view?usp=sharing">link</a> here, or the video is uploaded locally on this repo to download and watch</h4></i>
+<i><h4>If Presentation is not loaded, you can refer to the external <a href="https://drive.google.com/file/d/1UTSvr8qcSRD0UA18-H1VEk3If_vgpE-N/view?usp=sharing">link</a> here, or the video is uploaded locally on this repo to download and watch</h4></i>
 </p>
-<!-- align the file once uploaded -->
 
 ## Features (Detailed)
 ### **1. Sensor data collection**
@@ -309,9 +309,6 @@ Contributions welcome. Priority areas for improvement:
 * **Prompt tuning** — improve the sensor-to-prompt template for specific crops (cardamom, pepper, banana, tomato, rice)
 Open an issue or submit a PR on the project repository.
 
-<!-- 
-
-Add cover Page 
 Add Images 
 Add Presentation and demo video
 Add Codebase changes
