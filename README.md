@@ -77,7 +77,7 @@ The MYOSA Mini's BMP180 and APDS9960 are both actively read every loop cycle:
  
 | Sensor | Parameter | Agricultural meaning |
 |--------|-----------|----------------------|
-| BMP180 | Temperature (°C) | Canopy-level air temp; frost and heat stress detection |
+| BMP180 | Temperature (°C) | Canopy-level air temp : frost and heat stress detection |
 | BMP180 | Barometric pressure (hPa) | Pressure drop = incoming cold front or storm |
 | APDS9960 | Ambient light — clear channel (lux) | Photoperiod tracking; day-length affects flowering |
 |MPU6050| Animal Intrusion | Equipped in Farming Fences |
