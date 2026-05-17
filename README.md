@@ -36,7 +36,7 @@ Built by **TKMCE Students** as part of the MYOSA Make Your Own Sensors Applicati
  
 Smallholder farmers make daily decisions — when to irrigate, when to spray, when to harvest with no real-time, hyper-local data. National weather forecasts work at the district scale, not the field scale. Extension bulletins arrive weekly, not daily. There is no personalised, affordable advisory system built for the individual farm.
  
-**KhetGPT** solves this by turning the MYOSA Mini into an always-on field intelligence node.  It reads temperature, barometric pressure, ambient light, and canopy colour from the BMP180, MPU6050 and APDS9960 sensors. That data is posted securely to a cloud server, which enriches it with a live weather forecast and hands the combined context to Google Gemini. The LLM generates a plain-language farm advisory — under 500 words — and delivers it to the farmer's messenger service (SMS,WhatsApp,Telegram) automatically. PS: For the current technical stack for messaging Telegram is used
+**KhetGPT** solves this by turning the MYOSA Mini into an always-on field intelligence node.  It reads temperature, barometric pressure, ambient light, and canopy colour from the BMP180, MPU6050 and APDS9960 sensors. That data is posted securely to a cloud server, which enriches it with a live weather forecast and hands the combined context to Google Gemini. The LLM generates a plain-language farm advisory — under 500 words — and delivers it to the farmer's messenger service (SMS, WhatsApp,Telegram) automatically.The current implementation uses Telegram for message delivery
 
 
 No dashboard to check. No app to install. No technical knowledge needed. Just a message every morning in the farmer's own language telling them what happened in their field overnight and what to do today.
@@ -59,16 +59,20 @@ No dashboard to check. No app to install. No technical knowledge needed. Just a 
 
  ### **Videos**
 https://github.com/user-attachments/assets/08632e1a-e9cf-495f-8031-63f989886688
+<!-- Demo video attached using GitHub asset because of markdown embedding issues, but locally uploaded in the repo -->
 <p align="center"><i>Demo</i></p>
  <video controls width="100%">
   <source src="myosa-presentation.mp4" type="video/mp4">
 </video>
+<i><h4>If Demo is not loaded, you can refer to the external <a href="https://drive.google.com/file/d/1-qDRL7SbVYk5icCxpXtDSej6D9g7rGTk/view?usp=sharing">link</a> here, or the video is uploaded locally on this repo to download and watch</h4></i>
+<br>
 <p align="center"><i>Presentation</i>
 <i><h4>If Presentation is not loaded, you can refer to the external <a href="https://drive.google.com/file/d/1lTcCX1wZTP9j7hcAEMRGfbsYkwP-RXU_/view?usp=sharing">link</a> here, or the video is uploaded locally on this repo to download and watch</h4></i>
 </p>
 <!-- align the file once uploaded -->
 
 ## Features (Detailed)
+### **1. Sensor data collection**
 The MYOSA Mini's BMP180 and APDS9960 are both actively read every loop cycle:
  
 | Sensor | Parameter | Agricultural meaning |
