@@ -18,7 +18,7 @@ Tags:
   - Social Impact
 ---
 <p align="center">
-  <img src="khetgpt_cover_img.png" width="800"><br/>
+  <img src="assets/images/khetgpt_cover_img.png" width="800"><br/>
   <i>KhetGPT</i>
 </p>
 
@@ -53,7 +53,7 @@ No dashboard to check. No app to install. No technical knowledge needed. Just a 
  ## Demo / Examples
 ### **Image**
  <p align="center">
-  <img src="myosa-img.png" width="800"><br/>
+  <img src="assets/images/myosa-img.png" width="800"><br/>
   <i>Prototype</i>
 </p>
 
@@ -63,8 +63,11 @@ https://github.com/user-attachments/assets/2da829e8-957e-4b59-a0f8-4527ce0ec689
  <video controls width="100%">
   <source src="myosa-presentation.mp4" type="video/mp4">
 </video>
-<p align="center"><i>Presentation</i></p>
+<p align="center"><i>Presentation</i>
+<i><h4>If Presentation is not loaded, you can refer to the external <a href="https://drive.google.com/file/d/1lTcCX1wZTP9j7hcAEMRGfbsYkwP-RXU_/view?usp=sharing">link</a> here, or the video is uploaded locally on this repo to download and watch</h4></i>
+</p>
 <!-- align the file once uploaded -->
+
 ## Features (Detailed)
 The MYOSA Mini's BMP180 and APDS9960 are both actively read every loop cycle:
  
@@ -168,7 +171,7 @@ Adafruit MPU6050
 Adafruit GFX Library
 ```
  
-**2. Edit the firmware constants** in `khetgpt_esp32.ino`:
+**2. Edit the firmware constants** in `khetgpt.ino`:
  
 ```cpp
 const char* WIFI_SSID     = "YOUR_WIFI_NAME";
@@ -276,10 +279,12 @@ PORT                  — (optional; Render sets this automatically)
 /myosa-khetgpt
   ├─ README.md
   ├─ khetgpt.ino
-  ├─ khetgpt_cover_img.png
   ├─ myosa-demo.mp4
-  ├─ myosa-img.png
   ├─ myosa-presentation.mp4
+  ├─ assets/
+  │   └─ images/
+  │       ├─ khetgpt_cover_img.png
+  │       └─ myosa-img.png
   └─ server/
       ├─ package.json
       └─ server.js
