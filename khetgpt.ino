@@ -34,7 +34,7 @@ const char* Lang = "English"; // Change the language if you need
 // =====================================================
 // INTERVAL
 // =====================================================
-const unsigned long SEND_INTERVAL = 600000UL; // 10 minutes
+const unsigned long SEND_INTERVAL = 1000UL * 60 * 60 * 12;
 
 // =====================================================
 // OLED SETTINGS
@@ -294,7 +294,7 @@ void setup() {
 
   display.setCursor(0, 0);
 
-  display.println("INNO FARM SYSTEM");
+  display.println("KhetGPT");
   display.println("BOOTING...");
 
   display.display();
@@ -442,7 +442,7 @@ void loop() {
 
   display.setCursor(0, 0);
 
-  display.println("INNO FARM");
+  display.println("KhetGPT");
 
   display.println("----------------");
 
@@ -463,7 +463,7 @@ void loop() {
   display.display();
 
   // =================================================
-  // SEND EVERY 10 MINUTES
+  // SEND EVERY 12 hours (User can change this according to needs)
   // =================================================
   if (now - lastSent >= SEND_INTERVAL) {
 
