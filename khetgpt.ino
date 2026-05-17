@@ -2,6 +2,8 @@
 #include <Wire.h>
 #include <math.h>
 
+#include <Preferences.h>
+
 #include <Adafruit_BMP085.h>      // BMP180
 #include <Adafruit_APDS9960.h>    // APDS9960
 #include <Adafruit_GFX.h>
@@ -18,24 +20,29 @@
 #endif
 
 // =====================================================
-// WIFI SETTINGS/LOCATION SETTINGS
+// WIFI SETTINGS
 // =====================================================
 const char* WIFI_SSID     = "YOUR_WIFI_SSID";
 const char* WIFI_PASSWORD = "YOUR_WIFI_PASSWORD";
+
+// =====================================================
+// LOCATION
+// =====================================================
 const char* Location = "Kollam";
 
 // =====================================================
 // SERVER SETTINGS
 // =====================================================
-const char* SERVER_URL  = "https://YOUR-SERVER-NAME/process"; // replace with your hosted server link
-const char* ESP_API_KEY = "XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX"; // replace with your desired entry key
+const char* SERVER_URL  = "https://YOUR-SERVER-NAME/process";
+const char* ESP_API_KEY = "XXXXXXXXXXXXXXXXXXXXXXXX";
 
-const char* Lang = "English"; // Change the language if you need
+const char* Lang = "English";
 
 // =====================================================
-// INTERVAL
+// SEND INTERVAL (12 HOURS)
 // =====================================================
-const unsigned long SEND_INTERVAL = 1000UL * 60 * 60 * 12;
+const unsigned long SEND_INTERVAL =
+1000UL * 60UL * 60UL * 12UL;
 
 // =====================================================
 // OLED SETTINGS
@@ -57,6 +64,11 @@ Adafruit_BMP085 bmp;
 Adafruit_APDS9960 apds;
 
 // =====================================================
+// PREFERENCES STORAGE
+// =====================================================
+Preferences preferences;
+
+// =====================================================
 // GLOBALS
 // =====================================================
 unsigned long lastSent = 0;
@@ -65,13 +77,43 @@ uint16_t r, g, b, c;
 uint8_t proximity = 0;
 
 // =====================================================
+// STORE OFFLINE EVENT
+// =====================================================
+void storeOfflineEvent(String eventData) {
+
+  int count = preferences.getInt("count", 0);
+
+  String key = "event" + String(count);
+
+  preferences.putString(key.c_str(), eventData);
+
+  preferences.putInt("count", count + 1);
+
+  Serial.println("OFFLINE EVENT STORED");
+
+  // OLED
+  display.clearDisplay();
+
+  display.setCursor(0, 0);
+
+  display.println("NO INTERNET");
+
+  display.println("");
+
+  display.println("EVENT STORED");
+
+  display.display();
+
+  delay(2000);
+}
+
+// =====================================================
 // WIFI CONNECT
 // =====================================================
 void connectWiFi() {
 
   Serial.println("WIFI CONNECTING...");
 
-  // OLED DISPLAY
   display.clearDisplay();
 
   display.setTextSize(1);
@@ -85,15 +127,15 @@ void connectWiFi() {
 
   display.display();
 
-  // START WIFI
   WiFi.begin(WIFI_SSID, WIFI_PASSWORD);
 
 #ifdef ESP32
   WiFi.setSleep(false);
 #endif
 
-  // WAIT
-  while (WiFi.status() != WL_CONNECTED) {
+  int retry = 0;
+
+  while (WiFi.status() != WL_CONNECTED && retry < 20) {
 
     delay(500);
 
@@ -102,24 +144,134 @@ void connectWiFi() {
     display.print(".");
 
     display.display();
+
+    retry++;
   }
 
-  Serial.println("\nWiFi Connected");
+  if (WiFi.status() == WL_CONNECTED) {
 
-  Serial.println(WiFi.localIP());
+    Serial.println("\nWiFi Connected");
 
-  // OLED SUCCESS
+    Serial.println(WiFi.localIP());
+
+    display.clearDisplay();
+
+    display.setCursor(0, 0);
+
+    display.println("WIFI CONNECTED");
+
+    display.println("");
+
+    display.print("IP:");
+
+    display.println(WiFi.localIP());
+
+    display.display();
+
+    delay(2000);
+
+  } else {
+
+    Serial.println("\nWIFI FAILED");
+
+    display.clearDisplay();
+
+    display.setCursor(0, 0);
+
+    display.println("WIFI FAILED");
+
+    display.display();
+
+    delay(2000);
+  }
+}
+
+// =====================================================
+// SEND STORED EVENTS
+// =====================================================
+void sendStoredEvents() {
+
+  int count = preferences.getInt("count", 0);
+
+  if (count == 0) {
+    return;
+  }
+
+  Serial.println("SENDING STORED EVENTS");
+
   display.clearDisplay();
 
   display.setCursor(0, 0);
 
-  display.println("WIFI CONNECTED");
+  display.println("UPLOADING");
+  display.println("OFFLINE DATA");
 
-  display.println("");
+  display.display();
 
-  display.print("IP:");
+  for (int i = 0; i < count; i++) {
 
-  display.println(WiFi.localIP());
+    String key = "event" + String(i);
+
+    String data = preferences.getString(
+      key.c_str(),
+      ""
+    );
+
+    if (data.length() > 0) {
+
+#ifdef ESP8266
+
+      BearSSL::WiFiClientSecure client;
+
+      client.setInsecure();
+
+      HTTPClient https;
+
+      https.begin(client, SERVER_URL);
+
+#else
+
+      WiFiClientSecure client;
+
+      client.setInsecure();
+
+      HTTPClient https;
+
+      https.begin(client, SERVER_URL);
+
+#endif
+
+      https.addHeader(
+        "Content-Type",
+        "text/plain"
+      );
+
+      https.addHeader(
+        "X-ESP-Key",
+        ESP_API_KEY
+      );
+
+      https.POST(data);
+
+      https.end();
+
+      preferences.remove(key.c_str());
+
+      delay(1000);
+    }
+  }
+
+  preferences.putInt("count", 0);
+
+  Serial.println("ALL STORED EVENTS SENT");
+
+  display.clearDisplay();
+
+  display.setCursor(0, 0);
+
+  display.println("OFFLINE DATA");
+
+  display.println("SYNCED");
 
   display.display();
 
@@ -132,7 +284,10 @@ void connectWiFi() {
 void sendToServer(String payload) {
 
   if (WiFi.status() != WL_CONNECTED) {
-    connectWiFi();
+
+    storeOfflineEvent(payload);
+
+    return;
   }
 
 #ifdef ESP8266
@@ -157,9 +312,15 @@ void sendToServer(String payload) {
 
 #endif
 
-  https.addHeader("Content-Type", "text/plain");
+  https.addHeader(
+    "Content-Type",
+    "text/plain"
+  );
 
-  https.addHeader("X-ESP-Key", ESP_API_KEY);
+  https.addHeader(
+    "X-ESP-Key",
+    ESP_API_KEY
+  );
 
   Serial.println("\n[POST]");
   Serial.println(payload);
@@ -168,17 +329,23 @@ void sendToServer(String payload) {
 
   if (httpCode > 0) {
 
-    Serial.printf("[HTTP] %d\n", httpCode);
+    Serial.printf(
+      "[HTTP] %d\n",
+      httpCode
+    );
 
     String response = https.getString();
 
     Serial.println("[SERVER]");
+
     Serial.println(response);
 
   } else {
 
-    Serial.printf("[HTTP ERROR] %s\n",
-      https.errorToString(httpCode).c_str());
+    Serial.printf(
+      "[HTTP ERROR] %s\n",
+      https.errorToString(httpCode).c_str()
+    );
   }
 
   https.end();
@@ -187,83 +354,57 @@ void sendToServer(String payload) {
 // =====================================================
 // BUILD AI MESSAGE
 // =====================================================
-String buildLogicString(float temperature,
-                        float pressure,
-                        uint16_t light,
-                        uint8_t proximity) {
+String buildLogicString(
+  float temperature,
+  float pressure,
+  uint16_t light,
+  uint8_t proximity
+) {
 
-  String tempLabel;
+  String msg = "";
 
-  if      (temperature < 10) tempLabel = "very cold";
-  else if (temperature < 20) tempLabel = "cold";
-  else if (temperature < 30) tempLabel = "normal";
-  else if (temperature < 38) tempLabel = "warm";
-  else                       tempLabel = "dangerously hot";
+  msg += "Farm report from ";
 
-  float pressHpa = pressure / 100.0;
-
-  String pressLabel;
-
-  if      (pressHpa < 990)  pressLabel = "low pressure";
-  else if (pressHpa < 1013) pressLabel = "slightly low";
-  else if (pressHpa < 1025) pressLabel = "normal";
-  else                      pressLabel = "high pressure";
-
-  String lightLabel;
-
-  if      (light < 50)   lightLabel = "very dark";
-  else if (light < 200)  lightLabel = "dim";
-  else if (light < 1000) lightLabel = "moderate";
-  else                   lightLabel = "bright daylight";
-
-  String proximityLabel;
-
-  if      (proximity < 10) proximityLabel = "nothing nearby";
-  else if (proximity < 50) proximityLabel = "something nearby";
-  else                     proximityLabel = "object very close";
-
-  String msg = "Farm sensor report: ";
-
-  msg += "Temperature is ";
-  msg += String(temperature, 1);
-  msg += " C (";
-  msg += tempLabel;
-  msg += "). ";
-
-  msg += "Pressure is ";
-  msg += String(pressHpa, 1);
-  msg += " hPa (";
-  msg += pressLabel;
-  msg += "). ";
-
-  msg += "Ambient light level is ";
-  msg += String(light);
-  msg += " (";
-  msg += lightLabel;
-  msg += "). ";
-
-  msg += "Proximity level is ";
-  msg += String(proximity);
-  msg += " (";
-  msg += proximityLabel;
-  msg += "). ";
-
-  if (proximity > 50) {
-
-    msg += "Possible nearby movement or animal detected. ";
-    msg += "What should the farmer do immediately?";
-
-  } else {
-
-    msg += "No nearby activity detected. ";
-    msg += "What should the farmer monitor next?";
-  }
-  msg += "His location is in";
   msg += String(Location);
-  msg+= "fetch the weather too"
-  msg += "\nThe report should be in ";
+
+  msg += ". ";
+
+  msg += "Temperature: ";
+
+  msg += String(temperature);
+
+  msg += " C. ";
+
+  msg += "Pressure: ";
+
+  msg += String(pressure / 100.0);
+
+  msg += " hPa. ";
+
+  msg += "Light level: ";
+
+  msg += String(light);
+
+  msg += ". ";
+
+  msg += "Proximity: ";
+
+  msg += String(proximity);
+
+  msg += ". ";
+
+  if (proximity > 50 || light < 20) {
+
+    msg += "Possible animal intrusion detected. ";
+  }
+
+  msg += "Fetch local weather also. ";
+
+  msg += "Reply in ";
+
   msg += String(Lang);
-  msg += " language under 500 words.";
+
+  msg += " under 500 words.";
 
   return msg;
 }
@@ -279,10 +420,15 @@ void setup() {
 
   Wire.setClock(100000);
 
+  preferences.begin("khetgpt", false);
+
   // =================================================
   // OLED START
   // =================================================
-  if (!display.begin(SSD1306_SWITCHCAPVCC, 0x3C)) {
+  if (!display.begin(
+        SSD1306_SWITCHCAPVCC,
+        0x3C
+      )) {
 
     Serial.println("OLED FAIL");
 
@@ -298,6 +444,7 @@ void setup() {
   display.setCursor(0, 0);
 
   display.println("KhetGPT");
+
   display.println("BOOTING...");
 
   display.display();
@@ -362,6 +509,14 @@ void setup() {
   connectWiFi();
 
   // =================================================
+  // SEND OFFLINE EVENTS
+  // =================================================
+  if (WiFi.status() == WL_CONNECTED) {
+
+    sendStoredEvents();
+  }
+
+  // =================================================
   // READY SCREEN
   // =================================================
   display.clearDisplay();
@@ -391,15 +546,22 @@ void loop() {
   // =================================================
   // SENSOR VALUES
   // =================================================
-  float temperature = bmp.readTemperature();
+  float temperature =
+    bmp.readTemperature();
 
-  float pressure = bmp.readPressure() / 100.0;
+  float pressure =
+    bmp.readPressure();
 
   uint16_t light = 0;
 
   if (apds.colorDataReady()) {
 
-    apds.getColorData(&r, &g, &b, &c);
+    apds.getColorData(
+      &r,
+      &g,
+      &b,
+      &c
+    );
 
     light = c;
   }
@@ -409,29 +571,28 @@ void loop() {
   // =================================================
   // SERIAL MONITOR
   // =================================================
-  Serial.println("========== SENSOR DATA ==========");
+  Serial.println(
+    "========== SENSOR DATA =========="
+  );
 
   Serial.print("Temperature: ");
+
   Serial.print(temperature);
+
   Serial.println(" C");
 
   Serial.print("Pressure: ");
-  Serial.print(pressure);
+
+  Serial.print(pressure / 100.0);
+
   Serial.println(" hPa");
 
   Serial.print("Light: ");
+
   Serial.println(light);
 
-  Serial.print("Red: ");
-  Serial.println(r);
-
-  Serial.print("Green: ");
-  Serial.println(g);
-
-  Serial.print("Blue: ");
-  Serial.println(b);
-
   Serial.print("Proximity: ");
+
   Serial.println(proximity);
 
   Serial.println();
@@ -450,36 +611,65 @@ void loop() {
   display.println("----------------");
 
   display.print("Temp:");
+
   display.print(temperature);
+
   display.println(" C");
 
   display.print("Pres:");
-  display.print(pressure);
+
+  display.print(pressure / 100.0);
+
   display.println("hPa");
 
   display.print("Light:");
+
   display.println(light);
 
   display.print("Prox :");
+
   display.println(proximity);
+
+  if (WiFi.status() == WL_CONNECTED) {
+
+    display.println("WiFi: OK");
+
+  } else {
+
+    display.println("WiFi: OFF");
+  }
 
   display.display();
 
   // =================================================
-  // SEND EVERY 12 hours (User can change this according to needs)
+  // SEND EVERY 12 HOURS
   // =================================================
   if (now - lastSent >= SEND_INTERVAL) {
 
     lastSent = now;
 
-    String logicString = buildLogicString(
-      temperature,
-      pressure,
-      light,
-      proximity
-    );
+    String logicString =
+      buildLogicString(
+        temperature,
+        pressure,
+        light,
+        proximity
+      );
 
     sendToServer(logicString);
+  }
+
+  // =================================================
+  // TRY WIFI RECONNECT
+  // =================================================
+  if (WiFi.status() != WL_CONNECTED) {
+
+    connectWiFi();
+
+    if (WiFi.status() == WL_CONNECTED) {
+
+      sendStoredEvents();
+    }
   }
 
   delay(1000);
