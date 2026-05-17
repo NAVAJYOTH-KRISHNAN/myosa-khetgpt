@@ -180,6 +180,7 @@ Adafruit GFX Library
 ```cpp
 const char* WIFI_SSID     = "YOUR_WIFI_NAME";
 const char* WIFI_PASSWORD = "YOUR_WIFI_PASSWORD";
+const char* Location = "YOUR_LOCATION";
  
 const char* SERVER_URL    = "https://your-server.onrender.com/process";
 const char* ESP_API_KEY   = "your_secret_key_matching_server_env";
